@@ -1,3 +1,4 @@
+import sys
 from src.manager import Manager
 from src.models import Parameters
 
@@ -64,8 +65,18 @@ def display_tenants(manager):
 
 
 if __name__ == '__main__':
-    parameters = Parameters()
-    manager = Manager(parameters)
+    if len(sys.argv) > 3:
+        apartment_key = sys.argv[1]
+        year = int(sys.argv[2])
+        month = int(sys.argv[3])
+
+        parameters = Parameters()
+        manager = Manager(parameters)
+
+        settlement = manager.get_settlement(apartment_key, year, month)
+        print(f"Suma do zapłaty dla {apartment_key}: {settlement.total_due_pln} PLN")
+    else:
+        print(f"Błąd: Podaj <klucz> <rok> <miesiac>")
 
     display_apartments(manager)
     display_tenants(manager)
