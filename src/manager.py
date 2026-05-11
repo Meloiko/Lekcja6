@@ -71,4 +71,14 @@ class Manager:
             )
         for tenant in tenants_in_apartment ] 
     
+    def get_tax(self, year: int, month: int, tax_rate: float) -> int:
+        total_income = sum(t.amount_pln for t in self.transfers
+                           if t.date.startswith(f"{year}-{month:02d}")
+                           )
+        return int(round(total_income * tax_rate))
     
+    def find_apartments_without_bills(self, year: int, month: int) -> list[str]:
+        billed_apartments = {b.apartment for b in self.bills
+                             if b.settlement_year == year and b.settlement_month == month
+                             }
+        return [key for key in self.apartments.keys() if key not in billed_apartments]
